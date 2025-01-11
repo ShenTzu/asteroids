@@ -8,8 +8,14 @@ class Player(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
         self.rotation = 0
+        self.image = pygame.Surface([radius * 2, radius * 2],pygame.SRCALPHA)
+        #pygame.draw.circle(self.image, "white",(radius, radius), radius, width = 2)
+        self.rect = pygame.Rect(x, y, radius * 2, radius * 2)
+        self.rect.center = self.position
         self.original_image = self.image
         pygame.draw.polygon(self.image,"white",self.triangle(), width = 2)
+        self.rect = self.image.get_rect()
+        self.rect.center = self.position 
 
     # in the player class
     def triangle(self):

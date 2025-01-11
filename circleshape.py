@@ -13,9 +13,9 @@ class CircleShape(pygame.sprite.Sprite):
         self.velocity = pygame.Vector2(0, 0)
         self.radius = radius
 
-        self.image = pygame.Surface([radius * 2, radius * 2],pygame.SRCALPHA)
+        self.image = pygame.Surface([radius * 5, radius * 5],pygame.SRCALPHA)
         #pygame.draw.circle(self.image, "white",(radius, radius), radius, width = 2)
-        self.rect = pygame.Rect(x, y, radius * 2, radius * 2)
+        self.rect = pygame.Rect(x, y, radius * 5, radius * 5)
         self.rect.center = self.position
 
     def draw(self, screen):
