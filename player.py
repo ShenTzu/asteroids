@@ -1,5 +1,6 @@
 from constants import *
 from circleshape import *
+from shot import *
 
 class Player(CircleShape):
 
@@ -8,18 +9,19 @@ class Player(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
         self.rotation = 0
-        self.image = pygame.Surface([radius * 2, radius * 2],pygame.SRCALPHA)
+        #self.image = pygame.Surface([radius * 2, radius * 2],pygame.SRCALPHA)
         #pygame.draw.circle(self.image, "white",(radius, radius), radius, width = 2)
-        self.rect = pygame.Rect(x, y, radius * 2, radius * 2)
-        self.rect.center = self.position
+        #self.rect = pygame.Rect(x, y, radius * 2, radius * 2)
+        #self.rect.center = self.position
         self.original_image = self.image
-        pygame.draw.polygon(self.image,"white",self.triangle(), width = 2)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.position 
+        pygame.draw.polygon(self.image,"white",self.triangle(), width = 5)
+        #self.rect = self.image.get_rect()
+        #self.rect.center = self.position 
+        self.timer = 0
 
     # in the player class
     def triangle(self):
-        center = pygame.Vector2(self.radius, self.radius)
+        center = pygame.Vector2(self.image.get_width()/2, self.image.get_width()/2)
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = center + forward * self.radius
@@ -28,7 +30,7 @@ class Player(CircleShape):
         return [a, b, c]
 
     def draw(self, screen):
-        pygame.draw.polygon(screen,"white",self.triangle(), width = 2)
+        pygame.draw.polygon(screen,"white",self.triangle(), width = 5)
 
     def rotate(self, dt):
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -45,7 +47,14 @@ class Player(CircleShape):
         self.rect.centerx = self.position.x
         self.rect.centery = self.position.y
 
+    def shoot(self):
+        if self.timer <= 0:
+            shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
+            shot.velocity = pygame.Vector2(0,1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+            self.timer = PLAYER_SHOOT_COOLDOWN
+
     def update(self, dt):
+        self.timer -= dt
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -56,5 +65,6 @@ class Player(CircleShape):
             self.move(dt)
         if keys[pygame.K_s]:
             self.move(-dt)
-
+        if keys[pygame.K_SPACE]:
+            self.shoot()
    
